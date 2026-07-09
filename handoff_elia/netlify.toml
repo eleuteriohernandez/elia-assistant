@@ -1,0 +1,8 @@
+# Configuración de Netlify para la función el.ia
+# Coloca este archivo en la raíz del repo que despliegues en Netlify.
+
+[build]
+  functions = "netlify/functions"
+
+# La función queda disponible en:
+#   https://TU-SITIO.netlify.app/.netlify/functions/chat

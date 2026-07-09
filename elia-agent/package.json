@@ -1,0 +1,12 @@
+{
+  "name": "elia-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agente el.ia — Netlify Function proxy hacia la API de Anthropic",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

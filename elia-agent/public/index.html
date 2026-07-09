@@ -21,8 +21,8 @@
   .bubble { max-width:78%; padding:11px 15px; border-radius:16px; font-size:14px; line-height:1.5; }
   .bubble.assistant { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); border-bottom-left-radius:4px; color:#e8e8e8; }
   .bubble.user { background:linear-gradient(135deg,#00ffa3,#17f9ff); color:#032; font-weight:500; border-bottom-right-radius:4px; }
-  .chat-input { display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.25); }
-  .chat-input input { flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:12px 14px; color:#fff; font-size:14px; outline:none; }
+  .chat-input { display:flex; gap:10px; padding:14px 16px; border-top:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.25); cursor:text; }
+  .chat-input input { flex:1; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:12px 14px; color:#fff; font-size:14px; outline:none; pointer-events:auto; user-select:text; -webkit-user-select:text; position:relative; z-index:1; }
   .chat-input button { border:none; border-radius:10px; padding:0 18px; background:linear-gradient(135deg,#00ffa3,#17f9ff); color:#031; font-weight:700; cursor:pointer; }
   .chat-input button:disabled { opacity:0.5; cursor:default; }
   .status { margin-top:16px; font-size:12px; color:#6a6a6a; text-align:center; max-width:520px; }
@@ -36,8 +36,8 @@
 
   <div class="chat-shell">
     <div class="chat-body" id="chatBody"></div>
-    <div class="chat-input">
-      <input id="chatInput" type="text" placeholder="Escribe tu mensaje..." autocomplete="off">
+    <div class="chat-input" id="chatInputRow">
+      <input id="chatInput" type="text" placeholder="Escribe tu mensaje..." autocomplete="off" autofocus>
       <button id="chatSend">Enviar</button>
     </div>
   </div>
@@ -47,8 +47,19 @@
   const ENDPOINT = '/.netlify/functions/chat';
   const chatBody = document.getElementById('chatBody');
   const input = document.getElementById('chatInput');
+  const inputRow = document.getElementById('chatInputRow');
   const sendBtn = document.getElementById('chatSend');
   const statusEl = document.getElementById('status');
+
+  // Red de seguridad: si el clic/touch no enfoca el input de forma nativa
+  // (por alguna interferencia externa a la página), forzamos el foco.
+  ['click', 'touchend'].forEach((evt) => {
+    inputRow.addEventListener(evt, (e) => {
+      if (e.target !== sendBtn && document.activeElement !== input) {
+        input.focus();
+      }
+    });
+  });
 
   let history = [
     { role: 'assistant', text: '¡Hola! Soy el.ia. Pregúntame algo para comprobar que el agente responde correctamente.' }
